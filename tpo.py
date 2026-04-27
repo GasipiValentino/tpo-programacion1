@@ -363,30 +363,32 @@ def registrarVenta(codigo, indice_espectaculo, indice_sector, fila, columna,
     # Aca es donde cambia el valor de O (libre)
     disponibilidad[indice_espectaculo][indice_sector][fila][columna] = 1
 
-def venderEntradas():
+def venderEntradas(contador_ventas):
     """Proceso completo de venta de una o varias entradas."""
     print("\n====== VENTA DE ENTRADAS ======")
 
     indice_espectaculo = elegirEspectaculo()
-    if indice_espectaculo == -1:
-        return
+    while indice_espectaculo == -1:
+        print("Espectáculo inválido. Intente nuevamente.")
+        indice_espectaculo = elegirEspectaculo()
 
     indice_sector = elegirSector()
-    if indice_sector == -1:
-        return
+    while indice_sector == -1: 
+        print("Sector inválido. Intente nuevamente.")
+        indice_sector = elegirSector()
 
     cantidad = int(input("\n¿Cuántas entradas desea comprar? "))
-    if cantidad < 1:
+    while cantidad < 1:
         print("Cantidad inválida.")
-        return
+        cantidad = int(input("¿Cuántas entradas desea comprar? "))
 
     for i in range(cantidad):
         print("\n--- Entrada %d de %d ---" % (i + 1, cantidad))
 
         fila, columna = elegirAsiento(indice_espectaculo, indice_sector)
-        if fila == -1:
-            print("No se pudo registrar esta entrada.")
-            continue
+        while fila == -1:
+            print("Asiento inválido. Intente nuevamente.")
+            fila, columna = elegirAsiento(indice_espectaculo, indice_sector)
 
         if i == 0:
             nombre, dni, telefono = pedirDatos(True)
@@ -394,7 +396,8 @@ def venderEntradas():
             nombre, dni, telefono = pedirDatos(False)
 
         precio_final = calcularPrecio(indice_sector)
-        codigo, contador_ventas = generarCodigo(contador_ventas)
+        codigo, nuevo_contador = generarCodigo(contador_ventas)
+        contador_ventas = nuevo_contador
 
         mostrarResumen(codigo, indice_espectaculo, indice_sector, fila, columna,
                        nombre, dni, telefono, precio_final)
@@ -406,10 +409,13 @@ def venderEntradas():
         else:
             print("Compra cancelada.")
 
+    return contador_ventas
+
 # me gustaria que por ejemplo despues de poner mal un sector, por ejemplo poner 4 en vez de 1, 2 o 3 te vuelva a preguntar el sector, no que vaya de vuelta al principio
 
 # Menu
 def main():
+    contador_ventas = 1
     while True:
         print("\n====== SISTEMA DE GESTIÓN DE ESPECTÁCULOS ======")
         print("1. Comprar entradas")
@@ -422,7 +428,7 @@ def main():
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
-            venderEntradas()
+            contador_ventas = venderEntradas(contador_ventas)
         elif opcion == "2":
             mostrarEspectaculos()
         elif opcion == "3":
