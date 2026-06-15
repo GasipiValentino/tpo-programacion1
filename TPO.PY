@@ -2,16 +2,13 @@ import json
 import hashlib
 
 
-# campo no esta numerado
-# la estrucutra de 3 sectores queda pero el campo se usa con capacidad (30)
-# Quedan las filas y columnas del campo en 0 para que concuerden los nombres, precios etc
+#Se fija la capacidad del campo en 30
 
 CAMPO_CAPACIDAD    = 30
 GENEROS              = ["Rock Nacional", "Pop", "Cumbia", "Electronica", "Jazz", "Reggaeton", "Otro"]
-# Roles con contraseñas hardcodeadasdiferenciando administrador y boletero.
-# usuarios admin/boletero y contraselas admin123/bole123
-# en el segundo valor se indica el rol, para despues con un if, mostrar el menu correspondiente a caad uno
 
+# usuarios y contraseñas por defecto: admin/admin123 y boletero/bole123
+# se crean automaticamente en el archivo si no existe
 
 # el archivo de espectaculos en json
 ARCHIVO_ESPECTACULOS = "espectaculos.json"
@@ -427,8 +424,7 @@ def imprimirFilasMapa(matriz, fila_actual, total_filas, total_columnas):
 
 
 def mostrarMapa(disponibilidad, indice_espectaculo, indice_sector, espectaculos_nombres, sectores_nombres, sectores_filas, sectores_columnas):
-    # se sigue mostrando el mapa como antes O libre y X ocupado, pero ahora se calculan los lugares del campo (que es 30 si no hay entradas compradas).
-    # si el sector elegido no es campo, primero se guarda en la variable matriz la matriz de disponibilidad correspondiente a ese espectaculo y sector. Despues se obtienen la cantidad de filas y columnas de ese sector para saber cuantas posiciones tiene. Luego se muestra el nombre del espectaculo y del sector y se imprimen los numeros de los asientos en la parte superior usando un for que recorre todas las columnas. Despues otro for recorre cada fila de la matriz, imprime el numero de fila y dentro de ese for hay otro que recorre todas las columnas de esa fila. Si en la posicion de la matriz hay un 0 significa que el asiento esta libre y se muestra una O, pero si hay un 1 significa que ya fue vendido y se muestra una X. De esta forma se arma visualmente el mapa de ubicaciones para que el usuario pueda ver que asientos estan disponibles y cuales no. 
+    # muestra el mapa de asientos del sector elegido, O libre y X ocupado
     if indice_sector == 0:
         ocupados = disponibilidad[indice_espectaculo][0]
         libres   = CAMPO_CAPACIDAD - ocupados
@@ -492,7 +488,7 @@ def pedirDatos(es_comprador):
     while True:
         dni_str = input("DNI: ").strip()
         try:
-            dni_int = int(dni_str)
+            int(dni_str)
             if 7 <= len(dni_str) <= 8:
                 dni = dni_str 
                 break
@@ -746,7 +742,7 @@ def modificarUsuario(usuarios):
         return
     guardarUsuarios(usuarios)
 
-    # recorre las ventas una vez y devuelve todos los datos calculados
+# recorre las ventas una vez y devuelve todos los datos calculados
 def calcularEstadisticasVentas(ventas, espec_nombres, sectores_nombres):
     recaudacion_total = 0.0
     ventas_por_espec  = {}
