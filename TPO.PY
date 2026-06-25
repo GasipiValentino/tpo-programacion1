@@ -992,15 +992,14 @@ def main():
                 else:
                     print("Opción inválida, intente de nuevo.")
 
-        while True:
+        continuar = ""
+        while continuar not in ("s", "si", "n", "no"):
             continuar = input("\n¿Iniciar otra sesión? (s/n): ").strip().lower()
-            if continuar in ("s", "si"):
-                break
-            elif continuar in ("n", "no"):
-                print("Gracias por usar el sistema. Chau!")
-                break
-            else:
+            if continuar not in ("s", "si", "n", "no"):
                 print("Opción no válida. Responda 's', 'si', 'n' o 'no'.")
+        if continuar in ("n", "no"):
+            print("Gracias por usar el sistema. Chau!")
+            break
 
 
 
